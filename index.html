@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Forum&family=Arimo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -53,7 +54,6 @@
             position: fixed;
             left: 50%;
             transform: translateX(-50%);
-            margin-left: -341px;
             top: 39px;
             width: 715px;
             display: flex;
@@ -62,7 +62,7 @@
         }
 
         .nav-item {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Arimo', sans-serif;
             color: white;
             font-size: 24px;
             font-weight: 300;
@@ -71,6 +71,7 @@
             text-decoration: none;
             cursor: pointer;
             transition: opacity 0.3s;
+            text-align: center;
         }
 
         .nav-item:hover {
@@ -350,7 +351,6 @@
             top: 3292px;
         }
 
-        /* Submit Button */
         .submit-btn {
             position: absolute;
             left: 729px;
@@ -421,13 +421,10 @@
     </style>
 </head>
 <body>
-    <!-- Фиксированный хэдер -->
     <div class="header"></div>
     
-    <!-- Фиксированное лого -->
     <img class="logo" src="image/logo.png" alt="Logo" onclick="scrollToTop()">
     
-    <!-- Фиксированная навигация -->
     <div class="nav">
         <a href="#about" class="nav-item">Обо мне</a>
         <a href="#works" class="nav-item">Лучшие работы</a>
@@ -436,7 +433,6 @@
     </div>
     
     <div class="container">
-        <!-- About Section -->
         <div id="about" class="about-section">
             <div class="section-title">Обо Мне</div>
             <div class="about-text">
@@ -448,39 +444,30 @@
             </div>
         </div>
         
-        <!-- Profile Circles -->
         <div class="profile-circle"></div>
         <div class="red-border-circle"></div>
         
-        <!-- Separator -->
-        <img class="separator" src="https://storage.googleapis.com/codeless-app.appspot.com/uploads%2Fimages%2F0STsuntVm1yfhdGSLusJ%2Fe86524b7-6c23-4ec5-bdae-79f2cc7cd388.png" alt="Separator">
+        <img class="separator" src=".png" alt="Separator">
         
-        <!-- Best Works -->
         <div id="works" class="best-works-title">Лучшие Работы</div>
         <div class="work-item work-item-1"></div>
         <div class="work-item work-item-2"></div>
         <div class="work-item work-item-3"></div>
         
-        <!-- Directions -->
         <div id="directions" class="directions-title">Направления</div>
         
-        <!-- Typography Card - кликабельный -->
         <div class="typography-card" onclick="openTypographyPage()"></div>
         <div class="typography-text" onclick="openTypographyPage()">Типографика</div>
         
-        <!-- Composition Card - кликабельный -->
         <div class="composition-card" onclick="openCompositionPage()"></div>
         <div class="composition-text" onclick="openCompositionPage()">Основы<br>Композиции</div>
         
-        <!-- Color Theory Card - кликабельный -->
         <div class="color-card" onclick="openColorPage()"></div>
         <div class="color-text" onclick="openColorPage()">Цветоведение</div>
         
-        <!-- Feedback Section -->
         <div id="feedback" class="feedback-title">Обратная Связь</div>
         <div class="form-container"></div>
         
-        <!-- Форма обратной связи -->
         <div class="form-group field-name">
             <label class="form-label">Ваше имя</label>
             <input type="text" class="form-input" id="userName" placeholder="Введите ваше имя">
@@ -496,15 +483,12 @@
             <textarea class="form-input" id="userMessage" placeholder="Введите ваше сообщение" rows="3"></textarea>
         </div>
         
-        <!-- Submit Button -->
         <div class="submit-btn" onclick="sendFeedback()">
             <div class="submit-text">ОТПРАВИТЬ</div>
         </div>
         
-        <!-- Footer -->
         <div class="footer"></div>
         
-        <!-- Copyright -->
         <div class="copyright">
             <span class="copyright-year">© 2026 </span>
             <span class="copyright-name">Дмитрий нагиев</span>
@@ -512,12 +496,10 @@
     </div>
 
     <script>
-        // Функция прокрутки наверх
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Функции открытия страниц направлений
         function openTypographyPage() {
             window.open('typography.html', '_blank');
         }
@@ -530,7 +512,6 @@
             window.open('color.html', '_blank');
         }
 
-        // Функция отправки формы
         function sendFeedback() {
             const name = document.getElementById('userName').value.trim();
             const contact = document.getElementById('userContact').value.trim();
@@ -554,7 +535,6 @@
                 return;
             }
             
-            // Валидация email (если пользователь ввел email)
             if(contact.includes('@') && contact.includes('.')) {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if(!emailRegex.test(contact)) {
@@ -564,7 +544,6 @@
                 }
             }
             
-            // Валидация телефона (если пользователь ввел телефон)
             if(contact.match(/[0-9]/) && !contact.includes('@')) {
                 const phoneRegex = /^[\+\d\s\-\(\)]{10,}$/;
                 if(!phoneRegex.test(contact)) {
@@ -574,16 +553,13 @@
                 }
             }
             
-            // Успешная отправка
             alert(`Спасибо за обратную связь, ${name}!\n\nВаше сообщение:\n${message}`);
             
-            // Очистка формы
             document.getElementById('userName').value = '';
             document.getElementById('userContact').value = '';
             document.getElementById('userMessage').value = '';
         }
         
-        // Добавляем возможность отправки по Enter в текстовых полях
         document.querySelectorAll('.form-input').forEach(input => {
             input.addEventListener('keypress', function(e) {
                 if(e.key === 'Enter' && this.tagName !== 'TEXTAREA') {
@@ -593,7 +569,6 @@
             });
         });
 
-        // Подсветка активного пункта меню при прокрутке
         const sections = document.querySelectorAll('#about, #works, #directions, #feedback');
         const navItems = document.querySelectorAll('.nav-item');
 
