@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arimo', sans-serif;
+            background-color: #D3D3D3;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 1440px;
+            min-height: 4217px;
+            background-color: #D3D3D3;
+            position: relative;
+            margin-top: 113px;
+        }
+
+        .header {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            width: 1440px;
+            height: 113px;
+            background-color: #383838;
+            border-radius: 0 0 10px 10px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -677px;
+            top: 30px;
+            width: 46px;
+            height: 54px;
+            z-index: 1001;
+            cursor: pointer;
+        }
+
+        .nav {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-left: -341px;
+            top: 39px;
+            width: 715px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 1001;
+        }
+
+        .nav-item {
+            font-family: 'Inter', sans-serif;
+            color: white;
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: -0.2px;
+            line-height: 1.5;
+            text-decoration: none;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .nav-item:hover {
+            opacity: 0.8;
+        }
+
+        .about-section {
+            position: absolute;
+            left: 122px;
+            top: 304px;
+            width: 690px;
+        }
+
+        .section-title {
+            font-family: 'Forum', cursive;
+            color: #383838;
+            font-size: 64px;
+            letter-spacing: -0.6px;
+            line-height: 1.5;
+            text-decoration: underline;
+            margin-bottom: 42px;
+        }
+
+        .about-text {
+            font-family: 'Arimo', sans-serif;
+            color: #383838;
+            font-size: 24px;
+            letter-spacing: -0.2px;
+            line-height: 1.5;
+            width: 693px;
+            margin-bottom: 64px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 28px;
+        }
+
+        .social-icon {
+            width: 78px;
+            height: 78px;
+        }
+
+        .profile-circle {
+            position: absolute;
+            left: 942px;
+            top: 182px;
+            width: 652px;
+            height: 652px;
+            background-color: white;
+            border-radius: 50%;
+        }
+
+        .red-border-circle {
+            position: absolute;
+            left: 908px;
+            top: 163px;
+            width: 691px;
+            height: 691px;
+            border: 10px solid #E51026;
+            border-radius: 50%;
+            transform: rotate(180deg);
+        }
+
+        .separator {
+            position: absolute;
+            left: 122px;
+            top: 1067px;
+            width: 1196px;
+            height: 3px;
+        }
+
+        .best-works-title {
+            position: absolute;
+            left: 516px;
+            top: 1019px;
+            font-family: 'Forum', cursive;
+            color: #383838;
+            font-size: 64px;
+            letter-spacing: -0.6px;
+            line-height: 1.5;
+        }
+
+        .work-item {
+            position: absolute;
+            width: 360px;
+            height: 524px;
+            background-color: #383838;
+            top: 1148px;
+        }
+
+        .work-item-1 { left: 122px; }
+        .work-item-2 { left: 533px; }
+        .work-item-3 { left: 944px; }
+
+        .directions-title {
+            position: absolute;
+            left: 124px;
+            top: 1886px;
+            font-family: 'Forum', cursive;
+            color: #383838;
+            font-size: 64px;
+            letter-spacing: -0.6px;
+            line-height: 1.5;
+            text-decoration: underline;
+        }
+
+        .typography-card {
+            position: absolute;
+            left: 119px;
+            top: 1995px;
+            width: 606px;
+            height: 349px;
+            background-color: #292929;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            z-index: 10;
+        }
+
+        .typography-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .typography-text {
+            position: absolute;
+            left: 138px;
+            top: 2263px;
+            width: 272px;
+            font-family: 'Arimo', sans-serif;
+            color: white;
+            font-size: 40px;
+            letter-spacing: -0.4px;
+            line-height: 1.5;
+            cursor: pointer;
+            z-index: 11;
+        }
+
+        .composition-card {
+            position: absolute;
+            left: 119px;
+            top: 2382px;
+            width: 606px;
+            height: 238px;
+            background-color: #C60000;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            z-index: 10;
+        }
+
+        .composition-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .composition-text {
+            position: absolute;
+            left: 138px;
+            top: 2534px;
+            width: 230px;
+            font-family: 'Arimo', sans-serif;
+            color: white;
+            font-size: 40px;
+            letter-spacing: -0.4px;
+            line-height: 0.8;
+            white-space: pre-line;
+            cursor: pointer;
+            z-index: 11;
+        }
+
+        .color-card {
+            position: absolute;
+            left: 761px;
+            top: 1994px;
+            width: 556px;
+            height: 627px;
+            background-color: white;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            z-index: 10;
+        }
+
+        .color-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .color-text {
+            position: absolute;
+            left: 785px;
+            top: 2546px;
+            width: 267px;
+            font-family: 'Arimo', sans-serif;
+            color: black;
+            font-size: 40px;
+            letter-spacing: -0.4px;
+            line-height: 1.5;
+            cursor: pointer;
+            z-index: 11;
+        }
+
+        .feedback-title {
+            position: absolute;
+            left: 120px;
+            top: 2817px;
+            width: 1203px;
+            font-family: 'Forum', cursive;
+            color: #383838;
+            font-size: 64px;
+            letter-spacing: -0.6px;
+            line-height: 1.5;
+            text-decoration: underline;
+        }
+
+        .form-container {
+            position: absolute;
+            left: 121px;
+            top: 2925px;
+            width: 486px;
+            height: 586px;
+            background-color: #E51026;
+        }
+
+        .form-group {
+            position: absolute;
+            left: 729px;
+        }
+
+        .form-label {
+            font-family: 'Arimo', sans-serif;
+            color: #383838;
+            font-size: 24px;
+            letter-spacing: -0.2px;
+            line-height: 1.5;
+            opacity: 0.5;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .form-input {
+            width: 588px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #383838;
+            font-family: 'Arimo', sans-serif;
+            font-size: 18px;
+            color: #383838;
+            outline: none;
+            padding: 10px 0 5px 0;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            border-bottom-color: #E51026;
+        }
+
+        .form-input::placeholder {
+            color: #999;
+            font-size: 16px;
+        }
+
+        textarea.form-input {
+            min-height: 80px;
+            resize: vertical;
+            border-bottom: 2px solid #383838;
+        }
+
+        .field-name {
+            top: 3058px;
+        }
+
+        .field-email {
+            top: 3175px;
+        }
+
+        .field-message {
+            top: 3292px;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            position: absolute;
+            left: 729px;
+            top: 3440px;
+            width: 588px;
+            height: 67px;
+            background-color: #383838;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #4a4a4a;
+        }
+
+        .submit-text {
+            font-family: 'Arimo', sans-serif;
+            color: white;
+            font-size: 32px;
+            letter-spacing: -0.3px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .footer {
+            position: absolute;
+            left: 0;
+            top: 3716px;
+            width: 1440px;
+            height: 511px;
+            background-color: #383838;
+        }
+
+        .copyright {
+            position: absolute;
+            left: 517px;
+            top: 3936px;
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .copyright-year {
+            font-family: 'Arimo', sans-serif;
+            color: white;
+            font-size: 48px;
+            letter-spacing: -0.5px;
+            line-height: 1.5;
+        }
+
+        .copyright-name {
+            font-family: 'Arimo', sans-serif;
+            color: white;
+            font-size: 24px;
+            letter-spacing: -0.2px;
+            line-height: 1.5;
+            margin-top: 17px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 120px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Фиксированный хэдер -->
+    <div class="header"></div>
+    
+    <!-- Фиксированное лого -->
+    <img class="logo" src="https://storage.googleapis.com/codeless-app.appspot.com/uploads%2Fimages%2F0STsuntVm1yfhdGSLusJ%2Ff6ac526f-f7b7-4dd6-964f-8e0d2ef16afd.png" alt="Logo" onclick="scrollToTop()">
+    
+    <!-- Фиксированная навигация -->
+    <div class="nav">
+        <a href="#about" class="nav-item">Обо мне</a>
+        <a href="#works" class="nav-item">Лучшие работы</a>
+        <a href="#directions" class="nav-item">Направления</a>
+        <a href="#feedback" class="nav-item">Обратная связь</a>
+    </div>
+    
+    <div class="container">
+        <!-- About Section -->
+        <div id="about" class="about-section">
+            <div class="section-title">Обо Мне</div>
+            <div class="about-text">
+                Приветствую вас на моей цифровой платформе! Меня зовут Зимбабве, и я являюсь амбициозным специалистом в динамично развивающейся сфере «Информационные технологии в дизайне». Моя деятельность представляет собой гармоничный синтез креативного визуального мышления и передовых технологических решений.
+            </div>
+            <div class="social-icons">
+                <img class="social-icon" src="https://storage.googleapis.com/codeless-app.appspot.com/uploads%2Fimages%2F0STsuntVm1yfhdGSLusJ%2F36b950c7-bdc5-4665-b342-0a271b8cceb8.png" alt="Social 1">
+                <img class="social-icon" src="https://storage.googleapis.com/codeless-app.appspot.com/uploads%2Fimages%2F0STsuntVm1yfhdGSLusJ%2F63296c03-d430-4798-8528-d6e44f602ca7.png" alt="Social 2">
+            </div>
+        </div>
+        
+        <!-- Profile Circles -->
+        <div class="profile-circle"></div>
+        <div class="red-border-circle"></div>
+        
+        <!-- Separator -->
+        <img class="separator" src="https://storage.googleapis.com/codeless-app.appspot.com/uploads%2Fimages%2F0STsuntVm1yfhdGSLusJ%2Fe86524b7-6c23-4ec5-bdae-79f2cc7cd388.png" alt="Separator">
+        
+        <!-- Best Works -->
+        <div id="works" class="best-works-title">Лучшие Работы</div>
+        <div class="work-item work-item-1"></div>
+        <div class="work-item work-item-2"></div>
+        <div class="work-item work-item-3"></div>
+        
+        <!-- Directions -->
+        <div id="directions" class="directions-title">Направления</div>
+        
+        <!-- Typography Card - кликабельный -->
+        <div class="typography-card" onclick="openTypographyPage()"></div>
+        <div class="typography-text" onclick="openTypographyPage()">Типографика</div>
+        
+        <!-- Composition Card - кликабельный -->
+        <div class="composition-card" onclick="openCompositionPage()"></div>
+        <div class="composition-text" onclick="openCompositionPage()">Основы<br>Композиции</div>
+        
+        <!-- Color Theory Card - кликабельный -->
+        <div class="color-card" onclick="openColorPage()"></div>
+        <div class="color-text" onclick="openColorPage()">Цветоведение</div>
+        
+        <!-- Feedback Section -->
+        <div id="feedback" class="feedback-title">Обратная Связь</div>
+        <div class="form-container"></div>
+        
+        <!-- Форма обратной связи -->
+        <div class="form-group field-name">
+            <label class="form-label">Ваше имя</label>
+            <input type="text" class="form-input" id="userName" placeholder="Введите ваше имя">
+        </div>
+        
+        <div class="form-group field-email">
+            <label class="form-label">Телефон или e-mail</label>
+            <input type="text" class="form-input" id="userContact" placeholder="example@mail.com или +7 (999) 999-99-99">
+        </div>
+        
+        <div class="form-group field-message">
+            <label class="form-label">Сообщение</label>
+            <textarea class="form-input" id="userMessage" placeholder="Введите ваше сообщение" rows="3"></textarea>
+        </div>
+        
+        <!-- Submit Button -->
+        <div class="submit-btn" onclick="sendFeedback()">
+            <div class="submit-text">ОТПРАВИТЬ</div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer"></div>
+        
+        <!-- Copyright -->
+        <div class="copyright">
+            <span class="copyright-year">© 2026 </span>
+            <span class="copyright-name">Дмитрий нагиев</span>
+        </div>
+    </div>
+
+    <script>
+        // Функция прокрутки наверх
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Функции открытия страниц направлений
+        function openTypographyPage() {
+            window.open('typography.html', '_blank');
+        }
+
+        function openCompositionPage() {
+            window.open('composition.html', '_blank');
+        }
+
+        function openColorPage() {
+            window.open('color.html', '_blank');
+        }
+
+        // Функция отправки формы
+        function sendFeedback() {
+            const name = document.getElementById('userName').value.trim();
+            const contact = document.getElementById('userContact').value.trim();
+            const message = document.getElementById('userMessage').value.trim();
+            
+            if(!name) {
+                alert('Пожалуйста, введите ваше имя');
+                document.getElementById('userName').focus();
+                return;
+            }
+            
+            if(!contact) {
+                alert('Пожалуйста, введите телефон или e-mail');
+                document.getElementById('userContact').focus();
+                return;
+            }
+            
+            if(!message) {
+                alert('Пожалуйста, введите ваше сообщение');
+                document.getElementById('userMessage').focus();
+                return;
+            }
+            
+            // Валидация email (если пользователь ввел email)
+            if(contact.includes('@') && contact.includes('.')) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if(!emailRegex.test(contact)) {
+                    alert('Пожалуйста, введите корректный email адрес');
+                    document.getElementById('userContact').focus();
+                    return;
+                }
+            }
+            
+            // Валидация телефона (если пользователь ввел телефон)
+            if(contact.match(/[0-9]/) && !contact.includes('@')) {
+                const phoneRegex = /^[\+\d\s\-\(\)]{10,}$/;
+                if(!phoneRegex.test(contact)) {
+                    alert('Пожалуйста, введите корректный номер телефона');
+                    document.getElementById('userContact').focus();
+                    return;
+                }
+            }
+            
+            // Успешная отправка
+            alert(`Спасибо за обратную связь, ${name}!\n\nВаше сообщение:\n${message}`);
+            
+            // Очистка формы
+            document.getElementById('userName').value = '';
+            document.getElementById('userContact').value = '';
+            document.getElementById('userMessage').value = '';
+        }
+        
+        // Добавляем возможность отправки по Enter в текстовых полях
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if(e.key === 'Enter' && this.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                    sendFeedback();
+                }
+            });
+        });
+
+        // Подсветка активного пункта меню при прокрутке
+        const sections = document.querySelectorAll('#about, #works, #directions, #feedback');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const scrollPosition = window.scrollY + 150;
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.style.opacity = '0.7';
+                if (item.getAttribute('href') === `#${current}`) {
+                    item.style.opacity = '1';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
