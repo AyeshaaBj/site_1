@@ -146,7 +146,6 @@
         function deleteRecord(id) {
             if (confirm('Удалить эту запись?')) {
                 currentData = currentData.filter(item => item.id !== id);
-                // Перенумеровываем ID после удаления
                 for (let i = 0; i < currentData.length; i++) {
                     currentData[i].id = i + 1;
                 }
