@@ -553,20 +553,28 @@
                     return;
                 }
             }
+
+            let feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
+            
+            let nextId = 1;
+            for (let i = 0; i < feedbacks.length; i++) {
+                if (feedbacks[i].id >= nextId) {
+                    nextId = feedbacks[i].id + 1;
+                }
+            }
             
             const feedback = {
-                id: Date.now(),
+                id: nextId,
                 name: name,
                 contact: contact,
                 message: message,
                 date: new Date().toLocaleString('ru-RU')
             };
             
-            let feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
             feedbacks.unshift(feedback);
             localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
             
-            alert(`Спасибо за обратную связь, ${name}!\n\nВаше сообщение сохранено.`);
+            alert(`Спасибо за обратную связь, ${name}!\n\nВаше сообщение отправлено в базу данных. Номер обращения: ${nextId}`);
             
             document.getElementById('userName').value = '';
             document.getElementById('userContact').value = '';
