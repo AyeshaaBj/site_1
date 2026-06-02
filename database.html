@@ -11,7 +11,6 @@
     
     <p>
         <button onclick="refreshTable()">Обновить</button>
-        <button onclick="exportToCSV()">Экспорт в CSV</button>
         <button onclick="clearAllData()">Очистить всё</button>
     </p>
     
@@ -27,10 +26,11 @@
                 <th onclick="sortTable('name')">Имя</th>
                 <th onclick="sortTable('contact')">Контакт</th>
                 <th onclick="sortTable('message')">Сообщение</th>
+                <th>Действия</th>
             </tr>
         </thead>
         <tbody id="tableBody">
-            <tr><td colspan="5">Нет данных</td></tr>
+            <tr><td colspan="6">Нет данных</td></tr>
         </tbody>
     </table>
     
@@ -39,6 +39,7 @@
     <script>
         let currentData = [];
         let currentSort = { column: 'id', direction: 'desc' };
+        let editMode = null;
         
         function loadData() {
             const stored = localStorage.getItem('feedbacks');
@@ -101,21 +102,93 @@
             renderTable(filtered);
         }
         
+        function startEdit(id) {
+            editMode = id;
+            applySortAndRender();
+        }
+        
+        function cancelEdit() {
+            editMode = null;
+            applySortAndRender();
+        }
+        
+        function saveEdit(id) {
+            const newName = document.getElementById(`edit_name_${id}`).value.trim();
+            const newContact = document.getElementById(`edit_contact_${id}`).value.trim();
+            const newMessage = document.getElementById(`edit_message_${id}`).value.trim();
+            
+            if (!newName) {
+                alert('Имя не может быть пустым');
+                return;
+            }
+            if (!newContact) {
+                alert('Контакт не может быть пустым');
+                return;
+            }
+            if (!newMessage) {
+                alert('Сообщение не может быть пустым');
+                return;
+            }
+            
+            const index = currentData.findIndex(item => item.id === id);
+            if (index !== -1) {
+                currentData[index].name = newName;
+                currentData[index].contact = newContact;
+                currentData[index].message = newMessage;
+                currentData[index].date = new Date().toLocaleString('ru-RU') + ' (отредактировано)';
+                localStorage.setItem('feedbacks', JSON.stringify(currentData));
+            }
+            
+            editMode = null;
+            loadData();
+        }
+        
+        function deleteRecord(id) {
+            if (confirm('Удалить эту запись?')) {
+                currentData = currentData.filter(item => item.id !== id);
+                localStorage.setItem('feedbacks', JSON.stringify(currentData));
+                loadData();
+            }
+        }
+        
         function renderTable(data) {
             const tbody = document.getElementById('tableBody');
             if (data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5">Ничего не найдено</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6">Ничего не найдено</td></tr>';
                 return;
             }
-            tbody.innerHTML = data.map(item => `
-                <tr>
-                    <td>${item.id}</td>
-                    <td>${item.date || '-'}</td>
-                    <td>${escapeHtml(item.name)}</td>
-                    <td>${escapeHtml(item.contact)}</td>
-                    <td style="white-space: pre-wrap;">${escapeHtml(item.message)}</td>
-                </tr>
-            `).join('');
+            
+            tbody.innerHTML = data.map(item => {
+                if (editMode === item.id) {
+                    return `
+                        <tr>
+                            <td>${item.id}</td>
+                            <td>${item.date || '-'}</td>
+                            <td><input type="text" id="edit_name_${item.id}" value="${escapeHtml(item.name)}" style="width:100%"></td>
+                            <td><input type="text" id="edit_contact_${item.id}" value="${escapeHtml(item.contact)}" style="width:100%"></td>
+                            <td><textarea id="edit_message_${item.id}" style="width:100%; min-width:200px;" rows="2">${escapeHtml(item.message)}</textarea></td>
+                            <td>
+                                <button onclick="saveEdit(${item.id})">Сохранить</button>
+                                <button onclick="cancelEdit()">Отмена</button>
+                            </td>
+                        </tr>
+                    `;
+                } else {
+                    return `
+                        <tr>
+                            <td>${item.id}</td>
+                            <td>${item.date || '-'}</td>
+                            <td>${escapeHtml(item.name)}</td>
+                            <td>${escapeHtml(item.contact)}</td>
+                            <td style="white-space: pre-wrap;">${escapeHtml(item.message)}</td>
+                            <td>
+                                <button onclick="startEdit(${item.id})">Редактировать</button>
+                                <button onclick="deleteRecord(${item.id})">Удалить</button>
+                            </td>
+                        </tr>
+                    `;
+                }
+            }).join('');
         }
         
         function escapeHtml(str) {
@@ -130,31 +203,6 @@
         
         function refreshTable() {
             loadData();
-        }
-        
-        function exportToCSV() {
-            if (currentData.length === 0) {
-                alert('Нет данных');
-                return;
-            }
-            const headers = ['ID', 'Дата', 'Имя', 'Контакт', 'Сообщение'];
-            const rows = currentData.map(item => [
-                item.id,
-                item.date || '',
-                `"${item.name.replace(/"/g, '""')}"`,
-                `"${item.contact.replace(/"/g, '""')}"`,
-                `"${item.message.replace(/"/g, '""')}"`
-            ]);
-            const csvContent = [headers, ...rows].map(row => row.join(',')).join('\n');
-            const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.href = url;
-            link.setAttribute('download', `feedbacks_${new Date().toISOString().slice(0,19)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
         }
         
         function clearAllData() {
