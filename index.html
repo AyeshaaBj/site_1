@@ -512,53 +512,65 @@
             window.open('color.html', '_blank');
         }
 
-        function sendFeedback() {
-            const name = document.getElementById('userName').value.trim();
-            const contact = document.getElementById('userContact').value.trim();
-            const message = document.getElementById('userMessage').value.trim();
-            
-            if(!name) {
-                alert('Пожалуйста, введите ваше имя');
-                document.getElementById('userName').focus();
-                return;
-            }
-            
-            if(!contact) {
-                alert('Пожалуйста, введите телефон или e-mail');
+    function sendFeedback() {
+        const name = document.getElementById('userName').value.trim();
+        const contact = document.getElementById('userContact').value.trim();
+        const message = document.getElementById('userMessage').value.trim();
+        
+        if(!name) {
+            alert('Пожалуйста, введите ваше имя');
+            document.getElementById('userName').focus();
+            return;
+        }
+        
+        if(!contact) {
+            alert('Пожалуйста, введите телефон или e-mail');
+            document.getElementById('userContact').focus();
+            return;
+        }
+        
+        if(!message) {
+            alert('Пожалуйста, введите ваше сообщение');
+            document.getElementById('userMessage').focus();
+            return;
+        }
+        
+        if(contact.includes('@') && contact.includes('.')) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if(!emailRegex.test(contact)) {
+                alert('Пожалуйста, введите корректный email адрес');
                 document.getElementById('userContact').focus();
                 return;
             }
-            
-            if(!message) {
-                alert('Пожалуйста, введите ваше сообщение');
-                document.getElementById('userMessage').focus();
+        }
+        
+        if(contact.match(/[0-9]/) && !contact.includes('@')) {
+            const phoneRegex = /^[\+\d\s\-\(\)]{10,}$/;
+            if(!phoneRegex.test(contact)) {
+                alert('Пожалуйста, введите корректный номер телефона');
+                document.getElementById('userContact').focus();
                 return;
             }
-            
-            if(contact.includes('@') && contact.includes('.')) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if(!emailRegex.test(contact)) {
-                    alert('Пожалуйста, введите корректный email адрес');
-                    document.getElementById('userContact').focus();
-                    return;
-                }
-            }
-            
-            if(contact.match(/[0-9]/) && !contact.includes('@')) {
-                const phoneRegex = /^[\+\d\s\-\(\)]{10,}$/;
-                if(!phoneRegex.test(contact)) {
-                    alert('Пожалуйста, введите корректный номер телефона');
-                    document.getElementById('userContact').focus();
-                    return;
-                }
-            }
-            
-            alert(`Спасибо за обратную связь, ${name}!\n\nВаше сообщение:\n${message}`);
-            
-            document.getElementById('userName').value = '';
-            document.getElementById('userContact').value = '';
-            document.getElementById('userMessage').value = '';
         }
+        
+        const feedback = {
+            id: Date.now(),
+            name: name,
+            contact: contact,
+            message: message,
+            date: new Date().toLocaleString('ru-RU')
+        };
+        
+        let feedbacks = JSON.parse(localStorage.getItem('feedbacks') || '[]');
+        feedbacks.unshift(feedback);
+        localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+        
+        alert(`Спасибо за обратную связь, ${name}!\n\nВаше сообщение сохранено.`);
+        
+        document.getElementById('userName').value = '';
+        document.getElementById('userContact').value = '';
+        document.getElementById('userMessage').value = '';
+    }
         
         document.querySelectorAll('.form-input').forEach(input => {
             input.addEventListener('keypress', function(e) {
