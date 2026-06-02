@@ -21,7 +21,7 @@
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
             <tr>
-                <th onclick="sortTable('id')">ID</th>
+                <th onclick="sortTable('id')">Номер</th>
                 <th onclick="sortTable('date')">Дата</th>
                 <th onclick="sortTable('name')">Имя</th>
                 <th onclick="sortTable('contact')">Контакт</th>
@@ -47,7 +47,7 @@
                 currentData = JSON.parse(stored);
             } else {
                 const demo = [{
-                    id: Date.now(),
+                    id: 1,
                     name: "Пример Пользователь",
                     contact: "demo@example.com",
                     message: "Демонстрационная запись",
@@ -146,6 +146,10 @@
         function deleteRecord(id) {
             if (confirm('Удалить эту запись?')) {
                 currentData = currentData.filter(item => item.id !== id);
+                // Перенумеровываем ID после удаления
+                for (let i = 0; i < currentData.length; i++) {
+                    currentData[i].id = i + 1;
+                }
                 localStorage.setItem('feedbacks', JSON.stringify(currentData));
                 loadData();
             }
