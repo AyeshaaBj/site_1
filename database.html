@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>База данных обращений</title>
+</head>
+<body>
+    <h2>База данных обращений</h2>
+    
+    <p>Всего записей: <strong id="totalCount">0</strong></p>
+    
+    <p>
+        <button onclick="refreshTable()">Обновить</button>
+        <button onclick="exportToCSV()">Экспорт в CSV</button>
+        <button onclick="clearAllData()">Очистить всё</button>
+    </p>
+    
+    <p>
+        <input type="text" id="searchInput" placeholder="Поиск..." onkeyup="filterTable()">
+    </p>
+    
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+            <tr>
+                <th onclick="sortTable('id')">ID</th>
+                <th onclick="sortTable('date')">Дата</th>
+                <th onclick="sortTable('name')">Имя</th>
+                <th onclick="sortTable('contact')">Контакт</th>
+                <th onclick="sortTable('message')">Сообщение</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <tr><td colspan="5">Нет данных</td></tr>
+        </tbody>
+    </table>
+    
+    <p><a href="index.html">← На главную</a></p>
+
+    <script>
+        let currentData = [];
+        let currentSort = { column: 'id', direction: 'desc' };
+        
+        function loadData() {
+            const stored = localStorage.getItem('feedbacks');
+            if (stored) {
+                currentData = JSON.parse(stored);
+            } else {
+                const demo = [{
+                    id: Date.now(),
+                    name: "Пример Пользователь",
+                    contact: "demo@example.com",
+                    message: "Демонстрационная запись",
+                    date: new Date().toLocaleString('ru-RU')
+                }];
+                localStorage.setItem('feedbacks', JSON.stringify(demo));
+                currentData = demo;
+            }
+            document.getElementById('totalCount').innerText = currentData.length;
+            applySortAndRender();
+        }
+        
+        function sortTable(column) {
+            if (currentSort.column === column) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.column = column;
+                currentSort.direction = 'asc';
+            }
+            applySortAndRender();
+        }
+        
+        function applySortAndRender() {
+            let sorted = [...currentData];
+            sorted.sort((a, b) => {
+                let valA = a[currentSort.column];
+                let valB = b[currentSort.column];
+                if (currentSort.column === 'id') {
+                    valA = Number(valA);
+                    valB = Number(valB);
+                }
+                if (typeof valA === 'string') valA = valA.toLowerCase();
+                if (typeof valB === 'string') valB = valB.toLowerCase();
+                if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
+                if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+            renderTable(sorted);
+        }
+        
+        function filterTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (!searchTerm) {
+                applySortAndRender();
+                return;
+            }
+            const filtered = currentData.filter(item => 
+                item.name.toLowerCase().includes(searchTerm) ||
+                item.contact.toLowerCase().includes(searchTerm) ||
+                item.message.toLowerCase().includes(searchTerm)
+            );
+            renderTable(filtered);
+        }
+        
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5">Ничего не найдено</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.map(item => `
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.date || '-'}</td>
+                    <td>${escapeHtml(item.name)}</td>
+                    <td>${escapeHtml(item.contact)}</td>
+                    <td style="white-space: pre-wrap;">${escapeHtml(item.message)}</td>
+                </tr>
+            `).join('');
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+        
+        function refreshTable() {
+            loadData();
+        }
+        
+        function exportToCSV() {
+            if (currentData.length === 0) {
+                alert('Нет данных');
+                return;
+            }
+            const headers = ['ID', 'Дата', 'Имя', 'Контакт', 'Сообщение'];
+            const rows = currentData.map(item => [
+                item.id,
+                item.date || '',
+                `"${item.name.replace(/"/g, '""')}"`,
+                `"${item.contact.replace(/"/g, '""')}"`,
+                `"${item.message.replace(/"/g, '""')}"`
+            ]);
+            const csvContent = [headers, ...rows].map(row => row.join(',')).join('\n');
+            const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.setAttribute('download', `feedbacks_${new Date().toISOString().slice(0,19)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+        
+        function clearAllData() {
+            if (confirm('Удалить все обращения?')) {
+                localStorage.setItem('feedbacks', '[]');
+                loadData();
+            }
+        }
+        
+        loadData();
+    </script>
+</body>
+</html>
